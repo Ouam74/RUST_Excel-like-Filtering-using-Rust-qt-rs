@@ -110,8 +110,8 @@ struct MyWindow {
     col: i32,
     row: i32,
     form_index: Arc<Mutex<i32>>,
-    old_vec: Arc<Mutex<Vec<Ptr<QVariant>>>>,
-    new_vec: Arc<Mutex<Vec<Ptr<QVariant>>>>,
+    // old_vec: Arc<Mutex<Vec<Ptr<QVariant>>>>,
+    // new_vec: Arc<Mutex<Vec<Ptr<QVariant>>>>,
 }
 
 impl StaticUpcast<QObject> for MyWindow {
@@ -140,8 +140,8 @@ impl MyWindow {
            table.horizontal_header().set_stretch_last_section(true);
            table.vertical_header().set_stretch_last_section(true);
            table.set_alternating_row_colors(true);
-           let new_vec = Arc::new(Mutex::new(Vec::new()));
-           let old_vec = Arc::new(Mutex::new(Vec::new()));
+           // let new_vec = Arc::new(Mutex::new(Vec::new()));
+           // let old_vec = Arc::new(Mutex::new(Vec::new()));
 
            let my_string_array = [
                             ["Column", "Unit", "Test Group"],
@@ -206,16 +206,6 @@ impl MyWindow {
                     model_vec[i as usize].append_row_q_standard_item(item);
                 }
             }
-            // // Create current check state value of the "Select All" items
-            // for i in 0..col {
-            //      // let nrow = model_vec[i as usize].len();
-            //      let mut item = QStandardItem::new().into_ptr();
-            //      // let variant = QVariant::new().into_ptr();
-            //      item = model_vec[i as usize].item_1a(0);
-            //      *old_vec.append(item.check_state());
-            //      // *old_vec[i as usize].lock().unwrap() = item.check_state();
-            //      println!("{:?}", old_vec[i as usize]);
-            //  }
             // Create Form array
             let mut form_vec = Vec::new();
             for i in 0..col {
@@ -235,8 +225,8 @@ impl MyWindow {
              button_vec,
              model_vec,
              form_vec,
-             old_vec,
-             new_vec,
+             // old_vec,
+             // new_vec,
              col,
              row,
              form_index,
@@ -272,7 +262,8 @@ impl MyWindow {
                  item = self.model_vec[form_index as usize].item_1a(i);
                  item.set_check_state(CheckState::Unchecked);
             }
-         }
+            println!("Unselecting All");
+        }
          if item_clicked.text().to_std_string() == "Select All".to_string() && item_clicked.check_state() == CheckState::Checked
          {
             let mut item = QStandardItem::new().into_ptr();
@@ -281,6 +272,11 @@ impl MyWindow {
                 item = self.model_vec[form_index as usize].item_1a(i);
                 item.set_check_state(CheckState::Checked);
             }
+            println!("Selecting All");
+         }
+         else
+         {
+            println!("{:?} was clicked", item_clicked.text().to_std_string());
          }
     }
 }
